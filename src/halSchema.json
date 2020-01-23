@@ -1,0 +1,93 @@
+{
+  "title": "JSON Schema for nterprise HAL",
+  "id": "http://docs.nterprise.com/api/hal/schema.json",
+  "$schema": "http://json-schema.org/draft-06/schema#",
+  "required": [
+    "api_base",
+    "build_link_header",
+    "entity_definitions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "api_base": {
+      "type": "string",
+      "description": "The URL for the base part of the href",
+      "pattern": "^(https?:\/\/[-a-zA-Z0-9:._]{2,256}(?<!\/$))$"
+    },
+    "build_link_header": {
+      "type": "boolean",
+      "description": "Informs the middleware to build the Links header"
+    },
+    "entity_definitions": {
+      "type": "array",
+      "description": "The registered entities",
+      "items": {
+        "$ref": "#/definitions/entity_definition"
+      }
+    }
+  },
+  "definitions": {
+    "entity_definition": {
+      "type": "object",
+      "description": "Configuration settings for each entity",
+      "additionalProperties": false,
+      "required": [
+        "entity_type",
+        "collection_type",
+        "version",
+        "entity_path",
+        "collection_path",
+        "collection_query",
+        "collection_map",
+        "entity_map"
+      ],
+      "properties": {
+        "entity_type": {
+          "description": "The name of the resource",
+          "type": "string"
+        },
+        "collection_type": {
+          "description": "Name of the resource when it appears in a collection",
+          "type": "string"
+        },
+        "version": {
+          "description": "Version of the resource",
+          "type": "string"
+        },
+        "entity_path": {
+          "description": "Used to build the self link when the resource is embedded",
+          "type": "string",
+          "pattern": "^/{1}(([a-zA-Z0-9-_/:])+(?<!(/)$)|)$"
+        },
+        "collection_path": {
+          "description": "Used to build the self link when the resource is in a collection",
+          "type": "string",
+          "pattern": "^/{1}(([a-zA-Z0-9-_/:])+(?<!(/)$)|)$"
+        },
+        "collection_query": {
+          "description": "Allowed query parameters for the resource collection",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "collection_map": {
+          "type": "object",
+          "description": "Allowed properties for a resource when a collection is returned",
+          "additionalProperties": {
+            "type": "string",
+            "description": "string values"
+          }
+        },
+        "entity_map": {
+          "type": "object",
+          "description": "Allowed properties for the resource",
+          "additionalProperties": {
+            "type": "string",
+            "description": "string values"
+          }
+        }
+      }
+    }
+  }
+}

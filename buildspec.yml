@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      # Allow checking out of private repositories
+      - aws s3 sync s3://nterprise/credentials ~/.ssh/ --region $AWS_DEFAULT_REGION
+      - chmod 700 ~/.ssh
+      - chmod 600 ~/.ssh/id_rsa
+      - chmod 644 ~/.ssh/id_rsa.pub
+      # Install all packages
+      - npm install
+  pre_build:
+    commands:
+      - gulp lint
+      - gulp test
+  build:
+    commands:
+      - npm prune --production
+  post_build:
+    commands:
+      - gulp build
+artifacts:
+  type: zip
+  files:
+    - src/**/*
+    - tests/**/*
